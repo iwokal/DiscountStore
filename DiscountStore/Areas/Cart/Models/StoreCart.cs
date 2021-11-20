@@ -9,9 +9,9 @@ namespace DiscountStore.Areas.Cart.Models
     {
         public StoreCart()
         {
-            Items = new List<Item>();
+            Items = new Dictionary<string, Item>();
         }
 
-        public List<Item> Items { get; set; }
+        public Dictionary<string, Item> Items { get; set; }
     }
 }

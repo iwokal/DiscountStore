@@ -33,11 +33,11 @@ namespace DiscountStore.Tests.Controllers
             // Assert
             Assert.IsNotNull(service.currentCart.Items);
             Assert.AreEqual(1, service.currentCart.Items.Count);
-            Assert.AreEqual(item, service.currentCart.Items[0]);
+            Assert.AreEqual(item, service.currentCart.Items["test"]);
         }
 
         [TestMethod]
-        public void Remove()
+        public void AddSameItem()
         {
             // Arrange
             CartService service = new CartService();
@@ -63,15 +63,54 @@ namespace DiscountStore.Tests.Controllers
                 }
             };
 
-            service.currentCart.Items = new List<Item>() { item, item2 };
+            // Act
+            service.Add(item);
+            service.Add(item2);
+
+            // Assert
+            Assert.IsNotNull(service.currentCart.Items);
+            Assert.AreEqual(1, service.currentCart.Items.Count);
+            Assert.AreEqual(2, service.currentCart.Items["test"].Quantity);
+        }
+
+        [TestMethod]
+        public void Remove()
+        {
+            // Arrange
+            CartService service = new CartService();
+            Item item = new Item
+            {
+                SKU = "test",
+                Price = 1,
+                Discount = new Discount
+                {
+                    Price = 2,
+                    Quantity = 3
+                }
+            };
+
+            Item item2 = new Item
+            {
+                SKU = "test2",
+                Price = 1,
+                Discount = new Discount
+                {
+                    Price = 2,
+                    Quantity = 3
+                }
+            };
+
+            service.currentCart.Items = new Dictionary<string, Item>() { {item.SKU, item }, { item2.SKU, item2 } };
 
             // Act 
             service.Remove(item);
 
             // Assert
+            Item outValue;
             Assert.IsNotNull(service.currentCart.Items);
             Assert.AreEqual(1, service.currentCart.Items.Count);
-            Assert.IsFalse(service.currentCart.Items.Contains(item));
+            Assert.IsFalse(service.currentCart.Items.TryGetValue("test", out outValue));
+            Assert.IsNull(outValue);
         }
 
         [TestMethod]
@@ -101,7 +140,7 @@ namespace DiscountStore.Tests.Controllers
                 }
             };
 
-            service.currentCart.Items = new List<Item>() { item, item2};
+            service.currentCart.Items = new Dictionary<string, Item>() { { item.SKU, item }, { item2.SKU, item2 } };
 
             // Act 
             var total = service.GetTotal();
@@ -116,10 +155,11 @@ namespace DiscountStore.Tests.Controllers
         {
             // Arrange
             CartService service = new CartService();
-            Item mug1 = new Item
+            Item mug = new Item
             {
                 SKU = "mug",
                 Price = 1,
+                Quantity = 2,
                 Discount = new Discount
                 {
                     Price = 1.5,
@@ -138,17 +178,7 @@ namespace DiscountStore.Tests.Controllers
                 }
             };
 
-            Item mug2 = new Item
-            {
-                SKU = "mug",
-                Price = 1,
-                Discount = new Discount
-                {
-                    Price = 1.5,
-                    Quantity = 2
-                }
-            };
-            service.currentCart.Items = new List<Item>() { mug1, vase, mug2 };
+            service.currentCart.Items = new Dictionary<string, Item>() { { mug.SKU, mug }, { vase.SKU, vase } };
 
             // Act 
             var total = service.GetTotal();
