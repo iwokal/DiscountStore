@@ -2,7 +2,7 @@
 {
     public class Discount
     {
-        public string Quantity { get; set; }
+        public int Quantity { get; set; }
         public double Price { get; set; }
     }
 }

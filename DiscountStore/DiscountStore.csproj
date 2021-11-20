@@ -157,6 +157,7 @@
     <Compile Include="App_Start\IocConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Cart\Controllers\CartController.cs" />
+    <Compile Include="Areas\Cart\Models\StoreCart.cs" />
     <Compile Include="Areas\Cart\Models\Discount.cs" />
     <Compile Include="Areas\Cart\Models\Item.cs" />
     <Compile Include="Areas\Cart\Services\CartService.cs" />
