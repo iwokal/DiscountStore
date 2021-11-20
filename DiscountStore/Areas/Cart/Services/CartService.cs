@@ -7,10 +7,10 @@ namespace DiscountStore.Areas.Cart.Services
     public class CartService : ICartService
     {
         public StoreCart currentCart => _cart;
-        private StoreCart _cart => _cart ?? new StoreCart();
+        private StoreCart _cart = new StoreCart();
         public void Add(Item item)
         {
-            throw new NotImplementedException();
+            _cart.Items.Add(item);
         }
 
         public void Remove(Item item)
