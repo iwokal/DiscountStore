@@ -11,29 +11,32 @@ namespace DiscountStore.Areas.Cart.Services
         private StoreCart _cart = new StoreCart();
         public void Add(Item item)
         {
-            throw new NotImplementedException();
-           // _cart.Items.Add(item);
+            if (_cart.Items.ContainsKey(item.SKU))
+            {
+                _cart.Items[item.SKU].Quantity += item.Quantity;
+            }
+            else
+            {
+                _cart.Items.Add(item.SKU, item);
+            }
         }
 
         public void Remove(Item item)
         {
-            throw new NotImplementedException();
-            //_cart.Items.Remove(item);
+            _cart.Items.Remove(item.SKU);
         }
 
         public double GetTotal()
         {
-            throw new NotImplementedException();
-            //double total = 0;
-            //List<string> skus = _cart.Items.Select(x=> x.SKU).Distinct().ToList();
-            //foreach (var sku in skus)
-            //{
-            //    var item = _cart.Items.FirstOrDefault(x=>x.SKU == sku);
-            //    var quantity = _cart.Items.Count(x => x.SKU == item.SKU);
-            //    var price = quantity / item.Discount.Quantity * item.Discount.Price + quantity % item.Discount.Quantity * item.Price;
-            //    total += price;
-            //}
-            //return total;
+            double total = 0;
+            foreach (var item in _cart.Items)
+            {
+                var quantity = item.Value.Quantity;
+                var discount = item.Value.Discount;
+                var price = quantity / discount.Quantity * discount.Price + quantity % discount.Quantity * item.Value.Price;
+                total += price;
+            }
+            return total;
         }
     }
 }

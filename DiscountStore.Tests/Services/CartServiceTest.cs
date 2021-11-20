@@ -131,7 +131,7 @@ namespace DiscountStore.Tests.Controllers
 
             Item item2 = new Item
             {
-                SKU = "test",
+                SKU = "test2",
                 Price = 1,
                 Discount = new Discount
                 {
