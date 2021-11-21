@@ -1,4 +1,5 @@
 ﻿using DiscountStore.Areas.DataAccess;
+using System;
 using System.Linq;
 
 namespace DiscountStore.Areas.Cart.Services
@@ -7,7 +8,14 @@ namespace DiscountStore.Areas.Cart.Services
     {
         public double GetPriceBySku(string sku)
         {
-            return SqliteDataAccess.LoadPrices().FirstOrDefault(i => i.SKU == sku).Price;
+            try
+            {
+                return SqliteDataAccess.LoadPrices().FirstOrDefault(i => i.SKU == sku).Price;
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }
