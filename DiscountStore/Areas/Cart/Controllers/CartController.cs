@@ -1,5 +1,4 @@
 ﻿using DiscountStore.Areas.Cart.Factories;
-using DiscountStore.Areas.Cart.Models;
 using DiscountStore.Areas.Cart.Services;
 using System;
 using System.Net;
@@ -54,7 +53,7 @@ namespace DiscountStore.Areas.Cart.Controllers
            return _cartService.GetTotal();
         }
 
-        // GET: Cart/Clear
+        // POST: Cart/Clear
         public ActionResult Clear()
         {
             try

@@ -1,7 +1,5 @@
 ﻿using DiscountStore.Areas.Cart.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace DiscountStore.Areas.Cart.Services
 {
