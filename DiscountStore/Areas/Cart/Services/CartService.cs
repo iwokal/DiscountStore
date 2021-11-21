@@ -43,15 +43,15 @@ namespace DiscountStore.Areas.Cart.Services
                 double price;
                 if (discount != null)
                 {
-                   price = quantity / discount.Quantity * discount.Price + quantity % discount.Quantity * item.Value.Price;
+                   price = Math.Round(quantity / discount.Quantity * discount.Price + quantity % discount.Quantity * item.Value.Price, 2);
                 }
                 else
                 {
-                    price = quantity * item.Value.Price;
+                    price = Math.Round(quantity * item.Value.Price, 2);
                 }
                 total += price;
             }
-            return total;
+            return Math.Round(total, 2);
         }
 
         public void Clear()
