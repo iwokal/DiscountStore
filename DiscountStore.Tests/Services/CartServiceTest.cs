@@ -28,6 +28,7 @@ namespace DiscountStore.Tests.Controllers
             };
 
             // Act
+            service.currentCart.Items = new Dictionary<string, Item>();
             service.Add(item);
 
             // Assert
@@ -64,6 +65,7 @@ namespace DiscountStore.Tests.Controllers
             };
 
             // Act
+            service.currentCart.Items = new Dictionary<string, Item>();
             service.Add(item);
             service.Add(item2);
 
@@ -226,6 +228,44 @@ namespace DiscountStore.Tests.Controllers
             // Assert
             Assert.IsNotNull(service.currentCart.Items);
             Assert.AreEqual(2.7, total);
+        }
+
+        [TestMethod]
+        public void Clear()
+        {
+            // Arrange
+            CartService service = new CartService();
+            Item mug = new Item
+            {
+                SKU = "mug",
+                Price = 1,
+                Quantity = 2,
+                Discount = new Discount
+                {
+                    Price = 1.5,
+                    Quantity = 2
+                }
+            };
+
+            Item vase = new Item
+            {
+                SKU = "vase",
+                Price = 1.2,
+                Discount = new Discount
+                {
+                    Price = 2,
+                    Quantity = 3
+                }
+            };
+
+            service.currentCart.Items = new Dictionary<string, Item>() { { mug.SKU, mug }, { vase.SKU, vase } };
+
+            // Act 
+            service.Clear();
+
+            // Assert
+            Assert.IsNotNull(service.currentCart.Items);
+            Assert.AreEqual(0, service.currentCart.Items.Count);
         }
     }
 }

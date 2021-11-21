@@ -45,5 +45,10 @@ namespace DiscountStore.Areas.Cart.Services
             }
             return total;
         }
+
+        public void Clear()
+        {
+            _cart.Items.Clear();
+        }
     }
 }

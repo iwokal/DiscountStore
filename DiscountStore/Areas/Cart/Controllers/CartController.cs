@@ -19,7 +19,7 @@ namespace DiscountStore.Areas.Cart.Controllers
             _itemFactory = itemFactory;
         }
 
-        // POST: Cart/Add
+        // POST: Cart/Add/string
         public ActionResult Add(string sku)
         {
             try
@@ -34,7 +34,7 @@ namespace DiscountStore.Areas.Cart.Controllers
             }
         }
 
-        // POST: Cart/Remove
+        // POST: Cart/Remove/string
         public ActionResult Remove(string sku)
         {
             try
@@ -52,6 +52,20 @@ namespace DiscountStore.Areas.Cart.Controllers
         public double GetTotal()
         {
            return _cartService.GetTotal();
+        }
+
+        // GET: Cart/Clear
+        public ActionResult Clear()
+        {
+            try
+            {
+                _cartService.Clear();
+                return new HttpStatusCodeResult(HttpStatusCode.OK, "All items removed from cart");
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "Error while clearing the cart");
+            }
         }
     }
 }
