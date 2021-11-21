@@ -8,10 +8,28 @@ namespace DiscountStore.Areas.Cart.Services
     {
         public Discount GetDiscountBySku(string sku)
         {
-            var discount = new Discount();
-            discount.Quantity = SqliteDataAccess.LoadDiscounts().FirstOrDefault(i => i.SKU == sku).Quantity;
-            discount.Price = SqliteDataAccess.LoadDiscounts().FirstOrDefault(i => i.SKU == sku).Price;
-            return discount;
+            var discountFromDB = SqliteDataAccess.LoadDiscounts().FirstOrDefault(i => i.SKU == sku);
+            if (discountFromDB != null)
+            {
+                var discount = new Discount();
+                discount.Quantity = discountFromDB.Quantity;
+                discount.Price = discountFromDB.Price;
+                return discount;
+            }
+            return null;
+        }
+
+        public bool TryGetDiscountBySku(string sku, out Discount discount)
+        {
+            discount = new Discount();
+            var discountFromDB = SqliteDataAccess.LoadDiscounts().FirstOrDefault(i => i.SKU == sku);
+            if(discountFromDB != null)
+            {
+                discount.Quantity = discountFromDB.Quantity;
+                discount.Price = discountFromDB.Price;
+                return false;
+            }
+            return true;
         }
     }
 }

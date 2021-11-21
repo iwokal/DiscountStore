@@ -40,7 +40,15 @@ namespace DiscountStore.Areas.Cart.Services
             {
                 var quantity = item.Value.Quantity;
                 var discount = item.Value.Discount;
-                var price = quantity / discount.Quantity * discount.Price + quantity % discount.Quantity * item.Value.Price;
+                double price;
+                if (discount != null)
+                {
+                   price = quantity / discount.Quantity * discount.Price + quantity % discount.Quantity * item.Value.Price;
+                }
+                else
+                {
+                    price = quantity * item.Value.Price;
+                }
                 total += price;
             }
             return total;

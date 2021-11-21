@@ -231,6 +231,33 @@ namespace DiscountStore.Tests.Controllers
         }
 
         [TestMethod]
+        public void GetTotalWithoutDiscountOnItem()
+        {
+            // Arrange
+            CartService service = new CartService();
+            Item item = new Item
+            {
+                SKU = "test",
+                Price = 1
+            };
+
+            Item item2 = new Item
+            {
+                SKU = "test2",
+                Price = 3,
+            };
+
+            service.currentCart.Items = new Dictionary<string, Item>() { { item.SKU, item }, { item2.SKU, item2 } };
+
+            // Act 
+            var total = service.GetTotal();
+
+            // Assert
+            Assert.IsNotNull(service.currentCart.Items);
+            Assert.AreEqual(4, total);
+        }
+
+        [TestMethod]
         public void Clear()
         {
             // Arrange
