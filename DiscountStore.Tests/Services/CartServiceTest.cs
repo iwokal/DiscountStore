@@ -114,6 +114,46 @@ namespace DiscountStore.Tests.Controllers
         }
 
         [TestMethod]
+        public void RemoveBySku()
+        {
+            // Arrange
+            CartService service = new CartService();
+            Item item = new Item
+            {
+                SKU = "test",
+                Price = 1,
+                Discount = new Discount
+                {
+                    Price = 2,
+                    Quantity = 3
+                }
+            };
+
+            Item item2 = new Item
+            {
+                SKU = "test2",
+                Price = 1,
+                Discount = new Discount
+                {
+                    Price = 2,
+                    Quantity = 3
+                }
+            };
+
+            service.currentCart.Items = new Dictionary<string, Item>() { { item.SKU, item }, { item2.SKU, item2 } };
+
+            // Act 
+            service.Remove(item.SKU);
+
+            // Assert
+            Item outValue;
+            Assert.IsNotNull(service.currentCart.Items);
+            Assert.AreEqual(1, service.currentCart.Items.Count);
+            Assert.IsFalse(service.currentCart.Items.TryGetValue("test", out outValue));
+            Assert.IsNull(outValue);
+        }
+
+        [TestMethod]
         public void GetTotal()
         {
             // Arrange

@@ -6,6 +6,7 @@ namespace DiscountStore.Areas.Cart.Services
     {
         void Add(Item item);
         void Remove(Item item);
+        void Remove(string sku);
         double GetTotal();
     }
 }

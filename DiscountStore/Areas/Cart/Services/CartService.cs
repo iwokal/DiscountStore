@@ -9,7 +9,8 @@ namespace DiscountStore.Areas.Cart.Services
     {
         public StoreCart currentCart => _cart;
         //here we would fetch the current cart for the user properly using injected user service 
-        private StoreCart _cart = new StoreCart();
+        private static StoreCart _cart = new StoreCart();
+
         public void Add(Item item)
         {
             if (_cart.Items.ContainsKey(item.SKU))
@@ -24,7 +25,12 @@ namespace DiscountStore.Areas.Cart.Services
 
         public void Remove(Item item)
         {
-            _cart.Items.Remove(item.SKU);
+            Remove(item.SKU);
+        }
+
+        public void Remove(string sku)
+        {
+            _cart.Items.Remove(sku);
         }
 
         public double GetTotal()
