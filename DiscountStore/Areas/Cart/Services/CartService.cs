@@ -8,6 +8,7 @@ namespace DiscountStore.Areas.Cart.Services
     public class CartService : ICartService
     {
         public StoreCart currentCart => _cart;
+        //here we would fetch the current cart for the user properly using injected user service 
         private StoreCart _cart = new StoreCart();
         public void Add(Item item)
         {
