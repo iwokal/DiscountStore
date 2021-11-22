@@ -14,17 +14,10 @@ namespace DiscountStore.Areas.DataAccess
     {
         public static List<PriceModel> LoadPrices()
         {
-            try
+            using (IDbConnection con = new SqliteConnection(LoadConnectionString()))
             {
-                using (IDbConnection con = new SqliteConnection(LoadConnectionString()))
-                {
-                    var output = con.Query<PriceModel>("select * from Price", new DynamicParameters());
-                    return output.ToList();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
+                var output = con.Query<PriceModel>("select * from Price", new DynamicParameters());
+                return output.ToList();
             }
         }
 

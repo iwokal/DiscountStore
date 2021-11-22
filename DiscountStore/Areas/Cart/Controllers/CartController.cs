@@ -1,5 +1,6 @@
 ﻿using DiscountStore.Areas.Cart.Factories;
 using DiscountStore.Areas.Cart.Services;
+using log4net;
 using System;
 using System.Net;
 using System.Web.Http;
@@ -11,6 +12,7 @@ namespace DiscountStore.Areas.Cart.Controllers
     {
         private ICartService _cartService;
         private DiscountItemFactory _itemFactory;
+        private static readonly ILog _log = LogManager.GetLogger(typeof(CartController));
 
         public CartController(ICartService cartService, DiscountItemFactory itemFactory)
         {
@@ -24,11 +26,17 @@ namespace DiscountStore.Areas.Cart.Controllers
             try
             {
                 var item = _itemFactory.CreateItem(sku);
+                if (item == null)
+                {
+                    _log.Debug($"Item with this SKU ({sku}) doesn't exist");
+                    return new HttpStatusCodeResult(HttpStatusCode.NoContent, "Item with this SKU doesn't exist");
+                }
                 _cartService.Add(item);
                 return new HttpStatusCodeResult(HttpStatusCode.OK, "Item added to cart");
             }
             catch (Exception ex)
             {
+                _log.Error($"Error while fetching item (SKU- {sku}) from database: ", ex);
                 return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "Error while fetching item from database");
             }
         }
@@ -43,6 +51,7 @@ namespace DiscountStore.Areas.Cart.Controllers
             }
             catch (Exception ex)
             {
+                _log.Error($"Error while removing item (SKU- {sku})  from cart: ", ex);
                 return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "Error while removing item from cart");
             }
         }
@@ -50,7 +59,14 @@ namespace DiscountStore.Areas.Cart.Controllers
         // GET: Cart/GetTotal
         public double GetTotal()
         {
-           return _cartService.GetTotal();
+            try
+            {
+                return _cartService.GetTotal();
+            }
+            catch (Exception ex)
+            {
+                _log.Error($"Error while getting cart total", ex);
+            }
         }
 
         // POST: Cart/Clear
@@ -63,6 +79,7 @@ namespace DiscountStore.Areas.Cart.Controllers
             }
             catch (Exception ex)
             {
+                _log.Error("Error while clearing the cart: ", ex);
                 return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "Error while clearing the cart");
             }
         }

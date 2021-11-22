@@ -1,4 +1,5 @@
 ﻿using DiscountStore.Areas.Cart.Models;
+using log4net;
 using System;
 
 namespace DiscountStore.Areas.Cart.Services
@@ -8,6 +9,7 @@ namespace DiscountStore.Areas.Cart.Services
         public StoreCart currentCart => _cart;
         //here we would fetch the current cart for the user properly using injected user service 
         private static StoreCart _cart = new StoreCart();
+        private static readonly ILog _log = LogManager.GetLogger(typeof(CartService));
 
         public void Add(Item item)
         {
@@ -33,23 +35,32 @@ namespace DiscountStore.Areas.Cart.Services
 
         public double GetTotal()
         {
-            double total = 0;
-            foreach (var item in _cart.Items)
+            try
             {
-                var quantity = item.Value.Quantity;
-                var discount = item.Value.Discount;
-                double price;
-                if (discount != null)
+                double total = 0;
+                foreach (var item in _cart.Items)
                 {
-                   price = Math.Round(quantity / discount.Quantity * discount.Price + quantity % discount.Quantity * item.Value.Price, 2);
+                    var quantity = item.Value.Quantity;
+                    var discount = item.Value.Discount;
+                    double price;
+                    if (discount != null)
+                    {
+                        price = Math.Round(quantity / discount.Quantity * discount.Price + quantity % discount.Quantity * item.Value.Price, 2);
+                    }
+                    else
+                    {
+                        price = Math.Round(quantity * item.Value.Price, 2);
+                    }
+                    total += price;
                 }
-                else
-                {
-                    price = Math.Round(quantity * item.Value.Price, 2);
-                }
-                total += price;
+                return Math.Round(total, 2);
             }
-            return Math.Round(total, 2);
+            catch(Exception ex)
+            {
+                _log.Error("Error while calculating cart total: ", ex);
+                throw ex;
+            }
+
         }
 
         public void Clear()
