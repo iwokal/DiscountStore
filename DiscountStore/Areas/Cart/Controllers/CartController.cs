@@ -66,7 +66,7 @@ namespace DiscountStore.Areas.Cart.Controllers
             catch (Exception ex)
             {
                 _log.Error($"Error while getting cart total", ex);
-                throw ex;
+                throw;
             }
         }
 

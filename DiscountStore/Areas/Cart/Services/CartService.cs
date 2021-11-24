@@ -58,7 +58,7 @@ namespace DiscountStore.Areas.Cart.Services
             catch(Exception ex)
             {
                 _log.Error("Error while calculating cart total: ", ex);
-                throw ex;
+                throw;
             }
 
         }

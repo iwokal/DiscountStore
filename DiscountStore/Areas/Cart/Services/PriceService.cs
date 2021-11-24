@@ -23,7 +23,7 @@ namespace DiscountStore.Areas.Cart.Services
             catch(Exception ex)
             {
                 _log.Error($"Error while fetching the price from database for item SKU({sku}): ", ex);
-                throw ex;
+                throw;
             }
         }
     }
