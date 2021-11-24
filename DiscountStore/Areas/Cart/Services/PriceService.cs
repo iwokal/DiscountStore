@@ -18,7 +18,7 @@ namespace DiscountStore.Areas.Cart.Services
                 {
                     throw new ArgumentException();
                 }
-                return SqliteDataAccess.LoadPrices().FirstOrDefault(i => i.SKU == sku).Price;
+                return priceEntity.Price;
             }
             catch(Exception ex)
             {
